@@ -1,0 +1,35 @@
+item.materialEctoball.name=Ectoplasmic Shard
+item.materialEctoplasm.name=Ectoplasm
+item.materialPureEctoplasm.name=Pure Ectoplasm
+item.materialSpiritGold.name=Aurem
+item.materialSpiritIron.name=Ferro
+item.materialSpiritDiamond.name=Adamantia
+item.itemBinder.name=Spiritual Binder
+item.itemGlowTorch.name=Glowing Torch
+
+item.weaponGravitySword.name=Gravity Sword
+
+item.ectoHelmet.name=Ectoplasmic Helmet
+item.ectoChest.name=Ectoplasmic Chestplate
+item.ectoLegs.name=Ectoplasmic Leggings
+item.ectoBoots.name=Ectoplasmic Boots
+
+item.pickSpiritIron.name=Ferro Pickaxe
+item.axeSpiritIron.name=Ferro Axe
+item.swordSpiritIron.name=Ferro Sword
+item.hoeSpiritIron.name=Ferro Hoe
+item.shovelSpiritIron.name=Ferro Shovel
+
+item.pickSpiritGold.name=Aurem Pickaxe
+item.axeSpiritGold.name=Aurem Axe
+item.swordSpiritGold.name=Aurem Sword
+item.hoeSpiritGold.name=Aurem Hoe
+item.shovelSpiritGold.name=Aurem Shovel
+
+item.pickSpiritDiamond.name=Adamantia Pickaxe
+item.axeSpiritDiamond.name=Adamantia Axe
+item.swordSpiritDiamond.name=Adamantia Sword
+item.hoeSpiritDiamond.name=Adamantia Hoe
+item.shovelSpiritDiamond.name=Adamantia Shovel
+
+tile.blockEcto.name=Ectoplasmic Block
