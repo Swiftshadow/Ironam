@@ -20,7 +20,7 @@ public class SpiritStorage implements Capability.IStorage<ISpirit>
     @Override
     public void readNBT(Capability<ISpirit> capability, ISpirit instance, EnumFacing side, NBTBase nbt) {
         try {
-            //instance.setSpiritPoints(((NBTPrimitive) nbt).getFloat());
+            instance.setSpiritPoints(((NBTPrimitive) nbt).getFloat());
             System.out.println("READ NBT " + nbt.toString());
         } catch (java.lang.NullPointerException excep) {
            System.out.println("READ NBT NULL PTR CAUGHT");

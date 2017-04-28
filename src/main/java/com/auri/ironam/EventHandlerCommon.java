@@ -3,6 +3,7 @@ package com.auri.ironam;
 import com.auri.ironam.SpiritCapability.ISpirit;
 import com.auri.ironam.SpiritCapability.Spirit;
 import com.auri.ironam.SpiritCapability.SpiritProvider;
+import com.auri.ironam.SpiritCapability.SpiritStorage;
 import com.google.common.base.Objects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -76,21 +77,21 @@ public class EventHandlerCommon {
 
     @SubscribeEvent
     public void onRightClick(MouseEvent e) {
-        String handlerBinderName = ModItems.itemBinder.getUnlocalizedName();
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         String heldItemName;
         heldItemName = getHeldItemName();
         ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
         if (getButton(e) == 1) {
-            if (Objects.equal(heldItemName, handlerBinderName)) {
+            if (Objects.equal(heldItemName, ModItems.itemBinder.getUnlocalizedName())) {
                 spirit.setSpiritPoints(1);
+                System.out.println("SPIRIT POINTS ARE " + spirit.getSpiritPoints());
             }
             if (Objects.equal(heldItemName, ModItems.swordSpiritDiamond.getUnlocalizedName())) {
                     if (spirit.getSpiritPoints() == 1) {
                         System.out.println("ISSPIRIT");
                     }
             }
-            if (Objects.equal(heldItemName, ModItems.weaponGravitySword.getUnlocalizedName())) {
+            if (Objects.equal(heldItemName, ModItems.itemBinder.getUnlocalizedName())) {
                     spirit.setSpiritPoints(0);
             }
 
@@ -167,20 +168,24 @@ public class EventHandlerCommon {
     @SubscribeEvent
     public void onPlayerUnload(PlayerEvent.PlayerLoggedOutEvent e) {
         EntityPlayer player = e.player;
-        SpiritProvider spiritProvider = new SpiritProvider();
-        spiritProvider.serializeNBT();
+        Spirit spirit = new Spirit();
+        ISpirit iSpirit = spirit.getSpirit();
+        SpiritProvider provider = new SpiritProvider();
+        NBTTagCompound tag =  spirit.serializeNBT();
+        provider.serializeNBT();
+        System.out.println("NBT SAVED, IS " + spirit.getSpiritPoints());
     }
 
     @SubscribeEvent
     public void onPlayerLoad(PlayerEvent.PlayerLoggedInEvent e) {
         EntityPlayer player = e.player;
-        NBTPrimitive nbt = null;
-        player.deserializeNBT(player.getEntityData());
-        SpiritProvider spiritProvider = new SpiritProvider();
-        ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
-        //if (player.hasCapability(SpiritProvider.SPIRIT_CAPABILITY, null)) {
-            spiritProvider.deserializeNBT(nbt);
-        //}
+        Spirit spirit = new Spirit();
+        ISpirit iSpirit = spirit.getSpirit();
+        SpiritProvider provider = new SpiritProvider();
+        NBTTagCompound tag = player.getEntityData();
+        provider.deserializeNBT(tag);
+        spirit.deserializeNBT(tag);
+        System.out.println("NBT LOADED, IS " + spirit.getSpiritPoints());
     }
 
     @SubscribeEvent
