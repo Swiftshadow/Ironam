@@ -13,11 +13,6 @@ public class Spirit implements ISpirit {
 
     private float spiritPoints = 0.0f;
 
-    public ISpirit getSpirit() {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        SpiritProvider provider = new SpiritProvider();
-        return player.getCapability(provider.SPIRIT_CAPABILITY, null);
-    }
 
     public void setSpiritPoints(float points) {
         this.spiritPoints = points;
@@ -37,16 +32,5 @@ public class Spirit implements ISpirit {
         if (this.spiritPoints < 0) this.spiritPoints = 0;
     }
 
-    public NBTTagCompound serializeNBT() {
-        final NBTTagCompound tag = new NBTTagCompound();
-        tag.setFloat("spiritPoint", this.spiritPoints);
-        return tag;
-    }
-
-    public void deserializeNBT(NBTTagCompound nbt) {
-        if (nbt.hasKey("spiritPoint")) {
-            this.spiritPoints = nbt.getFloat("spiritPoint");
-        }
-    }
 
 }

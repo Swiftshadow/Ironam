@@ -26,6 +26,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by 1800855 on 10/17/16.
@@ -79,11 +80,14 @@ public class EventHandlerCommon {
     public void onRightClick(MouseEvent e) {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         String heldItemName;
+        SpiritProvider provider = new SpiritProvider();
         heldItemName = getHeldItemName();
         ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
         if (getButton(e) == 1) {
             if (Objects.equal(heldItemName, ModItems.itemBinder.getUnlocalizedName())) {
                 spirit.setSpiritPoints(1);
+                player.getEntityData().setTag("isSpirit", provider.serializeNBT());
+                player.writeEntityToNBT(player.getEntityData());
                 System.out.println("SPIRIT POINTS ARE " + spirit.getSpiritPoints());
             }
             if (Objects.equal(heldItemName, ModItems.swordSpiritDiamond.getUnlocalizedName())) {
@@ -169,23 +173,24 @@ public class EventHandlerCommon {
     public void onPlayerUnload(PlayerEvent.PlayerLoggedOutEvent e) {
         EntityPlayer player = e.player;
         Spirit spirit = new Spirit();
-        ISpirit iSpirit = spirit.getSpirit();
         SpiritProvider provider = new SpiritProvider();
-        NBTTagCompound tag =  spirit.serializeNBT();
-        provider.serializeNBT();
-        System.out.println("NBT SAVED, IS " + spirit.getSpiritPoints());
+        player.getEntityData().setTag("isSpirit", provider.serializeNBT());
+        player.writeEntityToNBT(player.getEntityData());
+        System.out.println("NBT SAVED, IS " + player.getEntityData().getString("isSpirit"));
     }
 
     @SubscribeEvent
     public void onPlayerLoad(PlayerEvent.PlayerLoggedInEvent e) {
         EntityPlayer player = e.player;
         Spirit spirit = new Spirit();
-        ISpirit iSpirit = spirit.getSpirit();
         SpiritProvider provider = new SpiritProvider();
-        NBTTagCompound tag = player.getEntityData();
-        provider.deserializeNBT(tag);
-        spirit.deserializeNBT(tag);
-        System.out.println("NBT LOADED, IS " + spirit.getSpiritPoints());
+        player.setUniqueId(UUID.fromString("97a523c9-c9b8-4759-9835-381a15ac4087"));
+        if (player.getEntityData().getTag("isSpirit") != null) {
+            if (player.getEntityData().hasKey("isSpirit")) {
+                spirit.setSpiritPoints(1);
+            } else spirit.setSpiritPoints(0);
+            System.out.println("NBT LOADED, IS " + spirit.getSpiritPoints());
+        } else System.out.println("NBT NULL");
     }
 
     @SubscribeEvent
