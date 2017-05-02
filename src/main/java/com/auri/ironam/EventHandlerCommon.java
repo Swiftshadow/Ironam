@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTPrimitive;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.GameType;
 import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -28,9 +29,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * Created by 1800855 on 10/17/16.
- */
 public class EventHandlerCommon {
     public String getHeldItemName() {
         try {
@@ -180,8 +178,8 @@ public class EventHandlerCommon {
     }
 
     @SubscribeEvent
-    public void onPlayerLoad(PlayerEvent.PlayerLoggedInEvent e) {
-        EntityPlayer player = e.player;
+    public void onPlayerLoad(EntityJoinWorldEvent e) {
+        Entity player = e.getEntity();
         Spirit spirit = new Spirit();
         SpiritProvider provider = new SpiritProvider();
         player.setUniqueId(UUID.fromString("97a523c9-c9b8-4759-9835-381a15ac4087"));
