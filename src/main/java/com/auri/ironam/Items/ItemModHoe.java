@@ -1,4 +1,4 @@
-package com.auri.ironam.ItemBase;
+package com.auri.ironam.Items;
 
 import net.minecraft.item.ItemHoe;
 

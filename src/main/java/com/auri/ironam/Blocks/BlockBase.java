@@ -1,4 +1,4 @@
-package com.auri.ironam.BlockBase;
+package com.auri.ironam.Blocks;
 
 import com.auri.ironam.ironam;
 import net.minecraft.block.Block;

@@ -3,7 +3,7 @@ package com.auri.ironam;
 /**
  * Created by 1800855 on 10/17/16.
  */
-import com.auri.ironam.ItemBase.*;
+import com.auri.ironam.Items.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -11,8 +11,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModItems {
 

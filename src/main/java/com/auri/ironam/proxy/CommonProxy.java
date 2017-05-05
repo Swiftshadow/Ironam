@@ -28,7 +28,6 @@ public class CommonProxy {
         }
 
         //Normal event regestration
-        MinecraftForge.EVENT_BUS.register(new EventHandlerCommon());
         EventHandlerCommon handler = new EventHandlerCommon();
         MinecraftForge.EVENT_BUS.register(handler);
         FMLCommonHandler.instance().bus().register(handler);

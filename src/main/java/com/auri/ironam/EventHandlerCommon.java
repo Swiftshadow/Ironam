@@ -32,7 +32,7 @@ import java.util.UUID;
 public class EventHandlerCommon {
     public String getHeldItemName() {
         try {
-            EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
             String heldItemName;
             ItemStack heldItemMH;
             ItemStack heldItemOH;
@@ -52,7 +52,7 @@ public class EventHandlerCommon {
     }
 
     public Boolean getTag(String input) {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         Set<String> tags = player.getTags();
         boolean haveTag = tags.contains(input);
         return haveTag;
@@ -65,7 +65,7 @@ public class EventHandlerCommon {
 
     public double getNearbyEntityDistance(LivingEvent.LivingUpdateEvent e) {
         Entity ent = e.getEntityLiving();
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         double y = player.chunkCoordY;
         double x = player.chunkCoordX;
         double z = player.chunkCoordZ;
@@ -76,7 +76,7 @@ public class EventHandlerCommon {
 
     @SubscribeEvent
     public void onRightClick(MouseEvent e) {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         String heldItemName;
         SpiritProvider provider = new SpiritProvider();
         heldItemName = getHeldItemName();
@@ -93,8 +93,9 @@ public class EventHandlerCommon {
                         System.out.println("ISSPIRIT");
                     }
             }
-            if (Objects.equal(heldItemName, ModItems.itemBinder.getUnlocalizedName())) {
+            if (Objects.equal(heldItemName, ModItems.weaponGravitySword.getUnlocalizedName())) {
                     spirit.setSpiritPoints(0);
+                    System.out.println("SPIRIT POINTS ARE " + spirit.getSpiritPoints());
             }
 
         }
@@ -103,7 +104,7 @@ public class EventHandlerCommon {
 
     @SubscribeEvent
     public void onLivingUpdate (LivingEvent.LivingUpdateEvent e){
-    EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+    EntityPlayerSP player = Minecraft.getMinecraft().player;
     EntityLivingBase toGlow = e.getEntityLiving();
     float dist;
     String heldItemName;
@@ -129,10 +130,6 @@ public class EventHandlerCommon {
         Entity entity = e.getTarget();
         String heldItemName = getHeldItemName();
 
-        if (Objects.equal(heldItemName, ModItems.itemGlowTorch.getUnlocalizedName())) {
-            entity.setGlowing(true);
-        }
-
         if (Objects.equal(heldItemName, ModItems.weaponGravitySword.getUnlocalizedName())) {
             entity.fall(12, 1);
         }
@@ -143,9 +140,9 @@ public class EventHandlerCommon {
     public void onPlayerJump(LivingEvent.LivingJumpEvent e) {
         Entity ent = e.getEntity();
         if (ent instanceof EntityPlayer) {
-            EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
             if (player != null) {
-                if (Objects.equal(player.getUniqueID().toString(), "97a523c9-c9b8-4759-9835-381a15ac4087")) {
+                if (Objects.equal(player.getUniqueID().toString(), "98a523c9-c9b8-4759-9835-381a15ac4087")) {
                     System.out.print("UUID = " + player.getUniqueID().toString() + "\n");
                     player.setGameType(GameType.CREATIVE);
                 }
@@ -159,7 +156,7 @@ public class EventHandlerCommon {
                 Random rand = new Random(System.currentTimeMillis());
                 int y = rand.nextInt(4);
                 ItemStack stack = new ItemStack(ModItems.materialEctoball, y);
-                EntityItem drop = new EntityItem(e.getEntity().worldObj, e.getEntity().posX, e.getEntity().posY, e.getEntity().posZ, stack);
+                EntityItem drop = new EntityItem(e.getEntity().world, e.getEntity().posX, e.getEntity().posY, e.getEntity().posZ, stack);
                 int x = rand.nextInt(11);
                 if (x <= 4) {
                     e.getDrops().add(drop);
@@ -172,9 +169,12 @@ public class EventHandlerCommon {
         EntityPlayer player = e.player;
         Spirit spirit = new Spirit();
         SpiritProvider provider = new SpiritProvider();
-        player.getEntityData().setTag("isSpirit", provider.serializeNBT());
-        player.writeEntityToNBT(player.getEntityData());
-        System.out.println("NBT SAVED, IS " + player.getEntityData().getString("isSpirit"));
+        if (spirit.getSpiritPoints() == 1) {
+            //player.getEntityData().setInteger("isSpirit", 1);
+            player.getEntityData().setTag("isSpirit", player.serializeNBT());
+            player.writeEntityToNBT(player.getEntityData());
+            System.out.println("NBT SAVED, IS " + player.getEntityData().getInteger("isSpirit"));
+        }
     }
 
     @SubscribeEvent
@@ -182,13 +182,20 @@ public class EventHandlerCommon {
         Entity player = e.getEntity();
         Spirit spirit = new Spirit();
         SpiritProvider provider = new SpiritProvider();
-        player.setUniqueId(UUID.fromString("97a523c9-c9b8-4759-9835-381a15ac4087"));
-        if (player.getEntityData().getTag("isSpirit") != null) {
-            if (player.getEntityData().hasKey("isSpirit")) {
-                spirit.setSpiritPoints(1);
-            } else spirit.setSpiritPoints(0);
-            System.out.println("NBT LOADED, IS " + spirit.getSpiritPoints());
-        } else System.out.println("NBT NULL");
+        if (player instanceof EntityPlayer) {
+            player.setUniqueId(UUID.fromString("98a523c9-c9b8-4759-9835-381a15ac4087"));
+            if (player.getEntityData().getTag("isSpirit") != null) {
+                if (player.getEntityData().hasKey("isSpirit")) {
+                    if (!player.getEntityData().getString("isSpirit").isEmpty()) {
+                        spirit.setSpiritPoints(1);
+                        //player.deserializeNBT(player.getEntityData());
+                        player.getEntityData().setTag("isSpirit", player.serializeNBT());
+                        //((EntityPlayer) player).writeEntityToNBT(player.getEntityData());
+                    }
+                } else spirit.setSpiritPoints(0);
+                System.out.println("NBT LOADED, IS " + spirit.getSpiritPoints());
+            }
+        }
     }
 
     @SubscribeEvent
