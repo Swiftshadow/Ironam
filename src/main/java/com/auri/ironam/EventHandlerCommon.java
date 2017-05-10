@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTPrimitive;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.GameType;
 import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -91,7 +92,7 @@ public class EventHandlerCommon {
             if (Objects.equal(heldItemName, ModItems.swordSpiritDiamond.getUnlocalizedName())) {
                     if (spirit.getSpiritPoints() == 1) {
                         System.out.println("ISSPIRIT");
-                    }
+                    } else System.out.println("IS NOT SPIRIT");
             }
             if (Objects.equal(heldItemName, ModItems.weaponGravitySword.getUnlocalizedName())) {
                     spirit.setSpiritPoints(0);
@@ -167,34 +168,28 @@ public class EventHandlerCommon {
     @SubscribeEvent
     public void onPlayerUnload(PlayerEvent.PlayerLoggedOutEvent e) {
         EntityPlayer player = e.player;
-        Spirit spirit = new Spirit();
+        ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
         SpiritProvider provider = new SpiritProvider();
-        if (spirit.getSpiritPoints() == 1) {
-            //player.getEntityData().setInteger("isSpirit", 1);
-            player.getEntityData().setTag("isSpirit", player.serializeNBT());
-            player.writeEntityToNBT(player.getEntityData());
-            System.out.println("NBT SAVED, IS " + player.getEntityData().getInteger("isSpirit"));
-        }
+        SpiritStorage storage = new SpiritStorage();
+        Capability<ISpirit> capability = null;
+        System.out.println("PLAYER UNLOADING");
+        System.out.println("NBT SET");
+        storage.writeNBT(capability, spirit, null);
+        System.out.println("NBT WRITTEN");
     }
 
     @SubscribeEvent
     public void onPlayerLoad(EntityJoinWorldEvent e) {
         Entity player = e.getEntity();
-        Spirit spirit = new Spirit();
+        ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
+        SpiritStorage storage = new SpiritStorage();
         SpiritProvider provider = new SpiritProvider();
+        NBTPrimitive nbt = null;
+        Capability<ISpirit> capability = null;
         if (player instanceof EntityPlayer) {
             player.setUniqueId(UUID.fromString("98a523c9-c9b8-4759-9835-381a15ac4087"));
-            if (player.getEntityData().getTag("isSpirit") != null) {
-                if (player.getEntityData().hasKey("isSpirit")) {
-                    if (!player.getEntityData().getString("isSpirit").isEmpty()) {
-                        spirit.setSpiritPoints(1);
-                        //player.deserializeNBT(player.getEntityData());
-                        player.getEntityData().setTag("isSpirit", player.serializeNBT());
-                        //((EntityPlayer) player).writeEntityToNBT(player.getEntityData());
-                    }
-                } else spirit.setSpiritPoints(0);
-                System.out.println("NBT LOADED, IS " + spirit.getSpiritPoints());
-            }
+            storage.readNBT(capability, spirit, null, nbt);
+            System.out.println("NBT LOADED, IS " + spirit.getSpiritPoints());
         }
     }
 
