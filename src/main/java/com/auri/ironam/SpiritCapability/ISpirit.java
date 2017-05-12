@@ -13,4 +13,8 @@ public interface ISpirit {
 
     void subSpiritPoints(float points);
 
+    void setHittable(boolean hittable);
+
+    boolean getHittable();
+
 }

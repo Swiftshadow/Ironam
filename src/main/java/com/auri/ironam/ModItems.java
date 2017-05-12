@@ -24,6 +24,9 @@ public class ModItems {
     public static ItemBase materialSpiritGold;
     public static ItemBase weaponGravitySword;
     public static ItemBase itemGlowTorch;
+    public static ItemBase itemPlayerDetector;
+    public static ItemBase spiritAntiGrav;
+    public static ItemBase spiritLightningStick;
 
     public static ItemModSword swordSpiritDiamond;
     public static ItemModPickaxe pickSpiritDiamond;
@@ -62,6 +65,9 @@ public class ModItems {
         materialSpiritGold = register(new ItemBase("materialSpiritGold").setCreativeTab(CreativeTabs.MATERIALS));
         weaponGravitySword = register(new ItemBase("weaponGravitySword").setCreativeTab(CreativeTabs.COMBAT));
         itemGlowTorch = register(new ItemBase("itemGlowTorch").setCreativeTab(CreativeTabs.TOOLS));
+        itemPlayerDetector = register(new ItemBase("itemPlayerDetector").setCreativeTab(CreativeTabs.TOOLS));
+        spiritAntiGrav = register(new ItemBase("spiritAntiGrav").setCreativeTab(CreativeTabs.TOOLS));
+        spiritLightningStick = register(new ItemBase("spiritLightningStick").setCreativeTab(CreativeTabs.COMBAT));
         GameRegistry.register(new ModArmor("ectoHelmet", EctoArmor, "ectoHelmet", EntityEquipmentSlot.HEAD));
         GameRegistry.register(new ModArmor("ectoChest", EctoArmor, "ectoChest", EntityEquipmentSlot.CHEST));
         GameRegistry.register(new ModArmor("ectoLegs", EctoArmor, "ectoLegs", EntityEquipmentSlot.LEGS));

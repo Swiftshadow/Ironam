@@ -13,6 +13,7 @@ public class Spirit implements ISpirit {
 
     private float spiritPoints = 0.0f;
 
+    private boolean hittable = true;
 
     public void setSpiritPoints(float points) {
         this.spiritPoints = points;
@@ -32,5 +33,12 @@ public class Spirit implements ISpirit {
         if (this.spiritPoints < 0) this.spiritPoints = 0;
     }
 
+    public void setHittable(boolean hittable) {
+        this.hittable = hittable;
+    }
+
+    public boolean getHittable() {
+        return this.hittable;
+    }
 
 }

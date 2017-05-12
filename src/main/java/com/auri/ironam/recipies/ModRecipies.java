@@ -65,6 +65,17 @@ public class ModRecipies {
                 'C', ModItems.materialSpiritDiamond
         );
 
+        GameRegistry.addShapedRecipe(
+                new ItemStack(ModItems.itemPlayerDetector),
+                "BDB",
+                " A ",
+                " C ",
+                'A', ModItems.itemGlowTorch,
+                'B', Items.GLOWSTONE_DUST,
+                'C', ModItems.materialSpiritDiamond,
+                'D', ModItems.materialPureEctoplasm
+        );
+
         GameRegistry.addShapelessRecipe(
                 new ItemStack(ModItems.materialPureEctoplasm),
                 ModItems.materialEctoplasm,

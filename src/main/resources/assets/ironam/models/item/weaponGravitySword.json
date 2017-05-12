@@ -1,6 +1,5 @@
 {
-  "_comment": "Generated using MiningMark48's JSON Generator.",
-  "parent": "item/handheld",
+  "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "ironam:items/weaponGravitySword"
   }
