@@ -211,18 +211,18 @@ public class EventHandlerCommon {
 
     @SubscribeEvent
     public void onPlayerJump(LivingEvent.LivingJumpEvent e) {
-        /*
+/*
         Entity ent = e.getEntity();
         if (ent instanceof EntityPlayer) {
             EntityPlayerSP player = Minecraft.getMinecraft().player;
             if (player != null) {
                 if (Objects.equal(player.getUniqueID().toString(), "98a523c9-c9b8-4759-9835-381a15ac4087")) {
-                    System.out.print("UUID = " + player.getUniqueID().toString() + "\n");
+                    //System.out.print("UUID = " + player.getUniqueID().toString() + "\n");
                     player.setGameType(GameType.CREATIVE);
                 }
             }
         }
-        */
+*/
     }
 
     @SubscribeEvent

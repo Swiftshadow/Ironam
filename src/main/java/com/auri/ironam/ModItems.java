@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModItems {
@@ -102,6 +103,31 @@ public class ModItems {
     {
         ModItems.weaponGravitySword.registerItemModel();
         ModItems.swordSpiritDiamond.registerItemModel();
+        ModItems.swordSpiritGold.registerItemModel();
+        ModItems.swordSpiritGold.registerItemModel();
+        ModItems.pickSpiritDiamond.registerItemModel();
+        ModItems.pickSpiritGold.registerItemModel();
+        ModItems.pickSpiritIron.registerItemModel();
+        ModItems.axeSpiritDiamond.registerItemModel();
+        ModItems.axeSpiritGold.registerItemModel();
+        ModItems.axeSpiritIron.registerItemModel();
+        ModItems.hoeSpiritDiamond.registerItemModel();
+        ModItems.hoeSpiritGold.registerItemModel();
+        ModItems.hoeSpiritIron.registerItemModel();
+        ModItems.shovelSpiritDiamond.registerItemModel();
+        ModItems.shovelSpiritGold.registerItemModel();
+        ModItems.shovelSpiritIron.registerItemModel();
+        ModItems.materialEctoplasm.registerItemModel();
+        ModItems.materialEctoball.registerItemModel();
+        ModItems.itemBinder.registerItemModel();
+        ModItems.materialPureEctoplasm.registerItemModel();
+        ModItems.materialSpiritDiamond.registerItemModel();
+        ModItems.materialSpiritIron.registerItemModel();
+        ModItems.materialSpiritGold.registerItemModel();
+        ModItems.itemGlowTorch.registerItemModel();
+        ModItems.itemPlayerDetector.registerItemModel();
+        ModItems.spiritAntiGrav.registerItemModel();
+        ModItems.spiritLightningStick.registerItemModel();
     }
 
     private static <T extends Item> T register(T item)
