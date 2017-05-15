@@ -5,6 +5,7 @@ import com.auri.ironam.SpiritCapability.Spirit;
 import com.auri.ironam.SpiritCapability.SpiritProvider;
 import com.auri.ironam.SpiritCapability.SpiritStorage;
 import com.google.common.base.Objects;
+import net.minecraft.block.BlockGrass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -14,6 +15,9 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTPrimitive;
@@ -26,21 +30,21 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
 public class EventHandlerCommon {
+    private int count = 0;
     public String getHeldItemName() {
         try {
             EntityPlayerSP player = Minecraft.getMinecraft().player;
@@ -60,13 +64,6 @@ public class EventHandlerCommon {
         } catch (java.lang.NullPointerException excep) {
             return "NOTHING";
         }
-    }
-
-    public Boolean getTag(String input) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
-        Set<String> tags = player.getTags();
-        boolean haveTag = tags.contains(input);
-        return haveTag;
     }
 
     public int getButton(MouseEvent e) {
@@ -189,12 +186,31 @@ public class EventHandlerCommon {
     public void onPlayerTick(TickEvent.PlayerTickEvent e) {
         EntityPlayer player = e.player;
         ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
-        Vec3d playerLook = player.getLookVec();
+        InventoryPlayer inv = player.inventory;
         if (spirit.getSpiritPoints() >= 1) {
             player.setInvisible(true);
             if (Objects.equal(getHeldItemName(), ModItems.spiritAntiGrav.getUnlocalizedName())) {
                 player.setNoGravity(true);
             } else player.setNoGravity(false);
+
+
+            while (count <= inv.getFieldCount()) {
+                System.out.println("i IS " + count);
+                System.out.println("ITEM IN SPOT i IS " + inv.getStackInSlot(count).getUnlocalizedName());
+
+                if (Objects.equal(inv.getStackInSlot(count).getUnlocalizedName(), new ItemStack(Items.DIAMOND).getUnlocalizedName())) {
+                    int num = inv.getStackInSlot(count).getCount();
+                    inv.getStackInSlot(count).setCount(num - 1);
+                    inv.setPickedItemStack(new ItemStack(ModItems.materialSpiritDiamond, 1));
+                    //inv.setItemStack(new ItemStack (ModItems.materialSpiritDiamond, 1));
+                    System.out.println("ONE DIAMOND CONVERTED");
+                }
+
+                if (count >= inv.getFieldCount()) {
+                    count = 0;
+                }
+                count++;
+            }
         } else player.setInvisible(false);
     }
 
@@ -243,6 +259,7 @@ public class EventHandlerCommon {
     public void onPlayerUnload(PlayerEvent.PlayerLoggedOutEvent e) {
         EntityPlayer player = e.player;
         ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
+        System.out.println("SPIRIT POINTS ARE " + spirit.getSpiritPoints());
         SpiritProvider provider = new SpiritProvider();
         SpiritStorage storage = new SpiritStorage();
         Capability<ISpirit> capability = null;

@@ -15,6 +15,11 @@ public interface ISpirit {
 
     void setHittable(boolean hittable);
 
+    //True is not hittable, false is hittable
     boolean getHittable();
+
+    void setCleared(boolean cleared);
+
+    boolean getCleared();
 
 }

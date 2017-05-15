@@ -15,6 +15,8 @@ public class Spirit implements ISpirit {
 
     private boolean hittable = true;
 
+    private boolean cleared = false;
+
     public void setSpiritPoints(float points) {
         this.spiritPoints = points;
     }
@@ -39,6 +41,14 @@ public class Spirit implements ISpirit {
 
     public boolean getHittable() {
         return this.hittable;
+    }
+
+    public void setCleared(boolean cleared) {
+        this.cleared = cleared;
+    }
+
+    public boolean getCleared() {
+        return this.cleared;
     }
 
 }
