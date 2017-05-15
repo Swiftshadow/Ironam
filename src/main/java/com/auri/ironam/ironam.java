@@ -27,8 +27,8 @@ public class ironam
     public static ISpirit spirit;
 
 
-    @Mod.Instance(MODID)
-    public static ironam instance;
+    //@Mod.Instance(MODID)
+    //public static ironam instance;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -38,8 +38,8 @@ public class ironam
         ModItems.init();
         ModRecipies.init();
         ModBlocks.init();
-        snw = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-        snw.registerMessage(CustomMessageHandler.class, CustomMessage.class, 0, Side.CLIENT);
+        //snw = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
+        //snw.registerMessage(CustomMessageHandler.class, CustomMessage.class, 0, Side.CLIENT);
         //CapabilityManager.INSTANCE.register(ISpirit, storage, default implementation factory);
         System.out.print("[" + Minecraft.getSystemTime() + "] [Ironam] Loading!\n");
     }

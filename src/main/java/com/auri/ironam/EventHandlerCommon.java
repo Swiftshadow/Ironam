@@ -194,23 +194,24 @@ public class EventHandlerCommon {
             } else player.setNoGravity(false);
 
 
-            while (count <= inv.getFieldCount()) {
-                System.out.println("i IS " + count);
-                System.out.println("ITEM IN SPOT i IS " + inv.getStackInSlot(count).getUnlocalizedName());
-
                 if (Objects.equal(inv.getStackInSlot(count).getUnlocalizedName(), new ItemStack(Items.DIAMOND).getUnlocalizedName())) {
                     int num = inv.getStackInSlot(count).getCount();
                     inv.getStackInSlot(count).setCount(num - 1);
-                    inv.setPickedItemStack(new ItemStack(ModItems.materialSpiritDiamond, 1));
+                    //inv.setPickedItemStack(new ItemStack(ModItems.materialSpiritDiamond, 1));
                     //inv.setItemStack(new ItemStack (ModItems.materialSpiritDiamond, 1));
+                    if (inv.getStackInSlot(count) == new ItemStack(ModItems.materialSpiritDiamond)) {
+                        inv.setInventorySlotContents(count, new ItemStack(ModItems.materialSpiritDiamond, inv.getStackInSlot(count).getCount() + 1));
+                    } else inv.setInventorySlotContents(inv.getFirstEmptyStack(), new ItemStack(ModItems.materialSpiritDiamond));
                     System.out.println("ONE DIAMOND CONVERTED");
                 }
 
-                if (count >= inv.getFieldCount()) {
-                    count = 0;
-                }
                 count++;
-            }
+
+                if (count >= inv.getSizeInventory()) {
+                    count = 0;
+                    System.out.println("COUNTER RESET");
+                }
+
         } else player.setInvisible(false);
     }
 
