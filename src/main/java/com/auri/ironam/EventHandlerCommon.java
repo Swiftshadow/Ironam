@@ -12,6 +12,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTPrimitive;
@@ -31,6 +35,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class EventHandlerCommon {
+    private int count = 0;
     public String getHeldItemName() {
         try {
             EntityPlayerSP player = Minecraft.getMinecraft().player;
@@ -52,20 +57,12 @@ public class EventHandlerCommon {
         }
     }
 
-    public Boolean getTag(String input) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
-        Set<String> tags = player.getTags();
-        boolean haveTag = tags.contains(input);
-        return haveTag;
-    }
-
     public int getButton(MouseEvent e) {
         int button = e.getButton();
         return button;
     }
 
-    public double getNearbyEntityDistance(LivingEvent.LivingUpdateEvent e) {
-        Entity ent = e.getEntityLiving();
+    public double getNearbyEntityDistance(Entity ent) {
         EntityPlayer player = Minecraft.getMinecraft().player;
         double y = player.chunkCoordY;
         double x = player.chunkCoordX;
@@ -79,28 +76,63 @@ public class EventHandlerCommon {
     public void onRightClick(MouseEvent e) {
         EntityPlayer player = Minecraft.getMinecraft().player;
         String heldItemName;
+        World world = player.getEntityWorld();
+        Vec3d playerLook = player.getLookVec();
         SpiritProvider provider = new SpiritProvider();
         heldItemName = getHeldItemName();
         ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
         if (getButton(e) == 1) {
             if (Objects.equal(heldItemName, ModItems.itemBinder.getUnlocalizedName())) {
-                spirit.setSpiritPoints(1);
+                spirit.addSpiritPoints(1);
                 player.getEntityData().setTag("isSpirit", provider.serializeNBT());
                 player.writeEntityToNBT(player.getEntityData());
                 System.out.println("SPIRIT POINTS ARE " + spirit.getSpiritPoints());
             }
             if (Objects.equal(heldItemName, ModItems.swordSpiritDiamond.getUnlocalizedName())) {
-                    if (spirit.getSpiritPoints() == 1) {
+                    if (spirit.getSpiritPoints() >= 1) {
                         System.out.println("ISSPIRIT");
                     } else System.out.println("IS NOT SPIRIT");
             }
             if (Objects.equal(heldItemName, ModItems.weaponGravitySword.getUnlocalizedName())) {
-                    spirit.setSpiritPoints(0);
+                    spirit.subSpiritPoints(1);
                     System.out.println("SPIRIT POINTS ARE " + spirit.getSpiritPoints());
+            }
+
+            if (spirit.getSpiritPoints() >= 1) {
+                if (Objects.equal(heldItemName, ModItems.spiritLightningStick.getUnlocalizedName())) {
+                    double x = playerLook.xCoord;
+                    double y = playerLook.yCoord;
+                    double z = playerLook.zCoord;
+                    world.addWeatherEffect(new EntityLightningBolt(world, x, y, z, true));
+                }
+                if (Objects.equal(heldItemName, ModItems.spiritAntiGrav.getUnlocalizedName())) {
+                    double x = playerLook.xCoord * .1;
+                    double y = playerLook.yCoord * .1;
+                    double z = playerLook.zCoord * .1;
+                    player.addVelocity(x, y, z);
+                }
             }
 
         }
 
+    }
+
+    @SubscribeEvent
+    public void onPlayerFall(LivingFallEvent e) {
+        Entity player = Minecraft.getMinecraft().player;
+        ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
+        if (player instanceof EntityPlayer) {
+            if (spirit.getSpiritPoints() >= 1) {
+                System.out.println("SPIRIT POINTS ARE " + spirit.getSpiritPoints());
+                e.setCanceled(true);
+                e.setDistance(0);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerHurt(LivingHurtEvent e) {
+        Entity player = e.getEntity();
     }
 
     @SubscribeEvent
@@ -110,24 +142,67 @@ public class EventHandlerCommon {
     float dist;
     String heldItemName;
     heldItemName = getHeldItemName();
-    if (toGlow != null) {
-        try {
-            dist = player.getDistanceToEntity(toGlow);
-        } catch (java.lang.NullPointerException excep) {
-            dist = 0;
-        }
-    } else dist = 11;
-    if (Objects.equal(heldItemName, ModItems.itemGlowTorch.getUnlocalizedName())) {
-        if (dist <= 10) {
-            toGlow.setGlowing(true);
-        } else toGlow.setGlowing(false);
-    } else toGlow.setGlowing(false);
+            if (toGlow != null) {
+                try {
+                    dist = player.getDistanceToEntity(toGlow);
+                } catch (java.lang.NullPointerException excep) {
+                    dist = 20;
+                }
+            } else dist = 20;
+            if (toGlow instanceof EntityPlayer) {
+                if (Objects.equal(heldItemName, ModItems.itemPlayerDetector.getUnlocalizedName())) {
+                    if (dist <= 5) {
+                        if (!Objects.equal(toGlow, player)) {
+                            toGlow.setGlowing(true);
+                        }
+                    } else toGlow.setGlowing(false);
+                } else toGlow.setGlowing(false);
+            } else {
+                if (Objects.equal(heldItemName, ModItems.itemGlowTorch.getUnlocalizedName())) {
+                    if (dist <= 15) {
+                        toGlow.setGlowing(true);
+                    } else toGlow.setGlowing(false);
+                } else toGlow.setGlowing(false);
+            }
 
     }
 
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent e) {
+        EntityPlayer player = e.player;
+        ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
+        InventoryPlayer inv = player.inventory;
+        if (spirit.getSpiritPoints() >= 1) {
+            player.setInvisible(true);
+            if (Objects.equal(getHeldItemName(), ModItems.spiritAntiGrav.getUnlocalizedName())) {
+                player.setNoGravity(true);
+            } else player.setNoGravity(false);
+
+
+                if (Objects.equal(inv.getStackInSlot(count).getUnlocalizedName(), new ItemStack(Items.DIAMOND).getUnlocalizedName())) {
+                    int num = inv.getStackInSlot(count).getCount();
+                    inv.getStackInSlot(count).setCount(num - 1);
+                    //inv.setPickedItemStack(new ItemStack(ModItems.materialSpiritDiamond, 1));
+                    //inv.setItemStack(new ItemStack (ModItems.materialSpiritDiamond, 1));
+                    if (inv.getStackInSlot(count) == new ItemStack(ModItems.materialSpiritDiamond)) {
+                        inv.setInventorySlotContents(count, new ItemStack(ModItems.materialSpiritDiamond, inv.getStackInSlot(count).getCount() + 1));
+                    } else inv.setInventorySlotContents(inv.getFirstEmptyStack(), new ItemStack(ModItems.materialSpiritDiamond));
+                    System.out.println("ONE DIAMOND CONVERTED");
+                }
+
+                count++;
+
+                if (count >= inv.getSizeInventory()) {
+                    count = 0;
+                    System.out.println("COUNTER RESET");
+                }
+
+        } else player.setInvisible(false);
+    }
 
     @SubscribeEvent
     public void onDamageOther(AttackEntityEvent e) {
+        EntityPlayer player = e.getEntityPlayer();
         Entity entity = e.getTarget();
         String heldItemName = getHeldItemName();
 
@@ -139,16 +214,18 @@ public class EventHandlerCommon {
 
     @SubscribeEvent
     public void onPlayerJump(LivingEvent.LivingJumpEvent e) {
+/*
         Entity ent = e.getEntity();
         if (ent instanceof EntityPlayer) {
             EntityPlayerSP player = Minecraft.getMinecraft().player;
             if (player != null) {
                 if (Objects.equal(player.getUniqueID().toString(), "98a523c9-c9b8-4759-9835-381a15ac4087")) {
-                    System.out.print("UUID = " + player.getUniqueID().toString() + "\n");
+                    //System.out.print("UUID = " + player.getUniqueID().toString() + "\n");
                     player.setGameType(GameType.CREATIVE);
                 }
             }
         }
+*/
     }
 
     @SubscribeEvent
@@ -167,29 +244,40 @@ public class EventHandlerCommon {
 
     @SubscribeEvent
     public void onPlayerUnload(PlayerEvent.PlayerLoggedOutEvent e) {
-        EntityPlayer player = e.player;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
+        System.out.println("SPIRIT POINTS ARE " + spirit.getSpiritPoints());
         SpiritProvider provider = new SpiritProvider();
         SpiritStorage storage = new SpiritStorage();
         Capability<ISpirit> capability = null;
         System.out.println("PLAYER UNLOADING");
         System.out.println("NBT SET");
         storage.writeNBT(capability, spirit, null);
-        System.out.println("NBT WRITTEN");
+        System.out.println("NBT WRITTEN, IS " + spirit.getSpiritPoints());
     }
 
     @SubscribeEvent
     public void onPlayerLoad(EntityJoinWorldEvent e) {
-        Entity player = e.getEntity();
-        ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
-        SpiritStorage storage = new SpiritStorage();
-        SpiritProvider provider = new SpiritProvider();
-        NBTPrimitive nbt = null;
-        Capability<ISpirit> capability = null;
-        if (player instanceof EntityPlayer) {
-            player.setUniqueId(UUID.fromString("98a523c9-c9b8-4759-9835-381a15ac4087"));
-            storage.readNBT(capability, spirit, null, nbt);
-            System.out.println("NBT LOADED, IS " + spirit.getSpiritPoints());
+        Entity entity = e.getEntity();
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        ISpirit spirit;
+        if (entity instanceof EntityPlayer) {
+            try {
+                spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
+            } catch (java.lang.NullPointerException excep) {
+                spirit = null;
+            }
+            SpiritStorage storage = new SpiritStorage();
+            SpiritProvider provider = new SpiritProvider();
+            NBTPrimitive nbt = null;
+            Capability<ISpirit> capability = null;
+            try {
+                player.setUniqueId(UUID.fromString("98a523c9-c9b8-4759-9835-381a15ac4087"));
+                storage.readNBT(capability, spirit, null, provider.serializeNBT());
+                System.out.println("NBT LOADED, IS " + spirit.getSpiritPoints());
+            } catch (java.lang.NullPointerException excep) {
+                System.out.println("Not a player");
+            }
         }
     }
 

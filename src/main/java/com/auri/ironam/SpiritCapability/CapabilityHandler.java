@@ -18,12 +18,12 @@ public class CapabilityHandler {
     public void attachCapability(AttachCapabilitiesEvent<Entity> e) {
         if (!(e.getObject() instanceof EntityPlayer)) return;
 
-        System.out.println("PRE-ADDDING " + SPIRIT_CAPABILITY.toString());
+        //System.out.println("PRE-ADDDING " + SPIRIT_CAPABILITY.toString());
         try {
         e.addCapability(SPIRIT_CAPABILITY, new SpiritProvider()); }
         catch (java.lang.IllegalStateException excep) {
-            System.out.println("DUPLICATE KEY CAUGHT");
+            //System.out.println("DUPLICATE KEY CAUGHT");
         }
-        System.out.println("POST-ADD");
+        //System.out.println("POST-ADD");
     }
 }

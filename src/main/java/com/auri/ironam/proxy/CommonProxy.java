@@ -24,7 +24,7 @@ public class CommonProxy {
         try {
             CapabilityManager.INSTANCE.register(ISpirit.class, new SpiritStorage(), Spirit.class);
         } catch (java.lang.IllegalStateException excep) {
-            System.out.println("INSTANCE EXCEPTION");
+
         }
 
         //Normal event regestration

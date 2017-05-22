@@ -42,7 +42,7 @@ public class SpiritProvider implements ICapabilitySerializable<NBTBase> {
     @Override
     public void deserializeNBT(NBTBase nbt) {
         //this.spirit.deserializeNBT(nbt);
-        //SPIRIT_CAPABILITY.getStorage().readNBT(SPIRIT_CAPABILITY, this.instance, null, nbt);
+        SPIRIT_CAPABILITY.getStorage().readNBT(SPIRIT_CAPABILITY, this.instance, null, nbt);
     }
 
 }
