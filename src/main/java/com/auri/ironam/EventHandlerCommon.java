@@ -18,10 +18,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTPrimitive;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameType;
@@ -38,13 +41,23 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.items.*;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.minecraftforge.items.wrapper.PlayerInvWrapper;
 
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
 public class EventHandlerCommon {
     private int count = 0;
+    private InventoryPlayer inv;
+    PlayerInvWrapper invWrapper;
+    CombinedInvWrapper comWrapper;
+    ItemHandlerHelper itemHelper;
+
     public String getHeldItemName() {
         try {
             EntityPlayerSP player = Minecraft.getMinecraft().player;
@@ -80,6 +93,20 @@ public class EventHandlerCommon {
         return dist;
     }
 
+    public void convertItem(Item toTake, Item toGive) {
+        if (Objects.equal(inv.getStackInSlot(count).getUnlocalizedName(), new ItemStack(toTake).getUnlocalizedName())) {
+            try {
+                if (Objects.equal(comWrapper.getStackInSlot(count).getUnlocalizedName(), new ItemStack(toTake).getUnlocalizedName())) {
+                    int num = inv.getStackInSlot(count).getCount();
+                    comWrapper.setStackInSlot(count, new ItemStack(toTake, 0));
+                    comWrapper.setStackInSlot(count, new ItemStack(toGive, num));
+                }
+            } catch (java.lang.NullPointerException excep) {
+                System.out.println("INV IS NULL");
+            }
+        }
+    }
+
 
     @SubscribeEvent
     public void onRightClick(MouseEvent e) {
@@ -92,6 +119,12 @@ public class EventHandlerCommon {
         ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
         if (getButton(e) == 1) {
             if (Objects.equal(heldItemName, ModItems.itemBinder.getUnlocalizedName())) {
+                if (spirit.getBound() == false) {
+                    spirit.setBoundX(player.posX);
+                    spirit.setBoundZ(player.posZ);
+                    spirit.setBoundY(player.posY);
+                    spirit.setBound(true);
+                }
                 spirit.addSpiritPoints(1);
                 player.getEntityData().setTag("isSpirit", provider.serializeNBT());
                 player.writeEntityToNBT(player.getEntityData());
@@ -104,16 +137,21 @@ public class EventHandlerCommon {
             }
             if (Objects.equal(heldItemName, ModItems.weaponGravitySword.getUnlocalizedName())) {
                     spirit.subSpiritPoints(1);
+                    if (spirit.getSpiritPoints() == 0) {
+                        spirit.setBound(false);
+                    }
                     System.out.println("SPIRIT POINTS ARE " + spirit.getSpiritPoints());
             }
 
             if (spirit.getSpiritPoints() >= 1) {
+
                 if (Objects.equal(heldItemName, ModItems.spiritLightningStick.getUnlocalizedName())) {
                     double x = playerLook.xCoord;
                     double y = playerLook.yCoord;
                     double z = playerLook.zCoord;
-                    world.addWeatherEffect(new EntityLightningBolt(world, x, y, z, true));
+                    world.addWeatherEffect(new EntityLightningBolt(world, x, y, z, false));
                 }
+
                 if (Objects.equal(heldItemName, ModItems.spiritAntiGrav.getUnlocalizedName())) {
                     double x = playerLook.xCoord * .1;
                     double y = playerLook.yCoord * .1;
@@ -128,24 +166,40 @@ public class EventHandlerCommon {
 
     @SubscribeEvent
     public void onPlayerFall(LivingFallEvent e) {
-        Entity player = e.getEntity();
-        ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
-        if (player instanceof EntityPlayer) {
-            if (spirit.getSpiritPoints() >= 1) {
-                System.out.println("SPIRIT POINTS ARE " + spirit.getSpiritPoints());
-                e.setCanceled(true);
-                e.setDistance(0);
+        Entity ent = e.getEntity();
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        ISpirit spirit = null;
+        if (player != null) {
+            spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
+        }
+        if (spirit != null) {
+            if (ent instanceof EntityPlayer) {
+                if (spirit.getSpiritPoints() >= 1) {
+                    if (spirit.getHittable()) {
+                        System.out.println("SPIRIT POINTS ARE " + spirit.getSpiritPoints());
+                        e.setCanceled(true);
+                        e.setDistance(0);
+                    }
+                }
             }
         }
     }
 
     @SubscribeEvent
     public void onPlayerHurt(LivingHurtEvent e) {
-        Entity player = e.getEntity();
-        ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
-        if (player instanceof EntityPlayer) {
-            if (spirit.getHittable()) {
-                e.setCanceled(true);
+        Entity ent = e.getEntity();
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        ISpirit spirit = null;
+        if (player != null) {
+            spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
+        }
+        if (spirit != null) {
+            if (ent instanceof EntityPlayer) {
+                if (spirit.getSpiritPoints() >= 1) {
+                    if (spirit.getHittable()) {
+                        e.setCanceled(true);
+                    }
+                }
             }
         }
     }
@@ -185,34 +239,60 @@ public class EventHandlerCommon {
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent e) {
         EntityPlayer player = e.player;
+        World world = player.world;
         ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
-        InventoryPlayer inv = player.inventory;
+        this.inv = player.inventory;
+        if (invWrapper == null) {
+            invWrapper = new PlayerInvWrapper(inv);
+            comWrapper = new CombinedInvWrapper(invWrapper);
+        }
+
+        if (itemHelper == null) {
+            itemHelper = new ItemHandlerHelper();
+        }
+
         if (spirit.getSpiritPoints() >= 1) {
             player.setInvisible(true);
+
+            if (player.posX > (spirit.getBoundX() + 30)) {
+                player.setPosition(player.posX - 1, player.posY, player.posZ);
+            }
+
+            if (player.posZ > (spirit.getBoundZ() + 30)) {
+                player.setPosition(player.posX , player.posY, player.posZ - 1);
+            }
+
+            if (player.posX < (spirit.getBoundX() - 30)) {
+                player.setPosition(player.posX + 1, player.posY, player.posZ);
+            }
+
+            if (player.posZ < (spirit.getBoundZ() - 30)) {
+                player.setPosition(player.posX , player.posY, player.posZ + 1);
+            }
             if (Objects.equal(getHeldItemName(), ModItems.spiritAntiGrav.getUnlocalizedName())) {
                 player.setNoGravity(true);
             } else player.setNoGravity(false);
 
+            convertItem(Items.DIAMOND, ModItems.materialSpiritDiamond);
+            convertItem(Items.IRON_INGOT, ModItems.materialSpiritIron);
+            convertItem(Items.GOLD_INGOT, ModItems.materialSpiritGold);
+            convertItem(ModItems.materialEctoplasm, ModItems.materialPureEctoplasm);
 
-                if (Objects.equal(inv.getStackInSlot(count).getUnlocalizedName(), new ItemStack(Items.DIAMOND).getUnlocalizedName())) {
-                    int num = inv.getStackInSlot(count).getCount();
-                    inv.getStackInSlot(count).setCount(num - 1);
-                    //inv.setPickedItemStack(new ItemStack(ModItems.materialSpiritDiamond, 1));
-                    //inv.setItemStack(new ItemStack (ModItems.materialSpiritDiamond, 1));
-                    if (inv.getStackInSlot(count) == new ItemStack(ModItems.materialSpiritDiamond)) {
-                        inv.setInventorySlotContents(count, new ItemStack(ModItems.materialSpiritDiamond, inv.getStackInSlot(count).getCount() + 1));
-                    } else inv.setInventorySlotContents(inv.getFirstEmptyStack(), new ItemStack(ModItems.materialSpiritDiamond));
-                    System.out.println("ONE DIAMOND CONVERTED");
-                }
+            if (inv.inventoryChanged) {
+                inv.markDirty();
+            }
 
-                count++;
+            count++;
 
-                if (count >= inv.getSizeInventory()) {
-                    count = 0;
-                    System.out.println("COUNTER RESET");
-                }
-
+            if (count >= inv.getSizeInventory()) {
+                count = 0;
+            }
         } else player.setInvisible(false);
+
+        if (Objects.equal(getHeldItemName(), ModItems.itemRedstoneStick.getUnlocalizedName())) {
+           // itemHelper.calcRedstoneFromInventory();
+        }
+
     }
 
     @SubscribeEvent
@@ -287,7 +367,8 @@ public class EventHandlerCommon {
 
     @SubscribeEvent
     public void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone e) {
-        EntityPlayer player = e.getEntityPlayer();
+        EntityPlayer eplayer = e.getEntityPlayer();
+        EntityPlayer player = Minecraft.getMinecraft().player;
         ISpirit spirit = player.getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
         ISpirit oldSpirit = e.getOriginal().getCapability(SpiritProvider.SPIRIT_CAPABILITY, null);
 

@@ -20,7 +20,6 @@ public class ItemModSword extends ItemSword {
     public void registerItemModel()
     {
         ironam.proxy.registerItemRenderer(this, 0, name);
-        System.out.println("One sword loaded named " + name);
     }
 
 }

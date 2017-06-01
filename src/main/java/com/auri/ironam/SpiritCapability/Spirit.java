@@ -17,6 +17,14 @@ public class Spirit implements ISpirit {
 
     private boolean cleared = false;
 
+    private double boundX = 0;
+
+    private double boundZ = 0;
+
+    private double boundY = 0;
+
+    private boolean isBound = false;
+
     public void setSpiritPoints(float points) {
         this.spiritPoints = points;
     }
@@ -49,6 +57,39 @@ public class Spirit implements ISpirit {
 
     public boolean getCleared() {
         return this.cleared;
+    }
+
+    public void setBoundX(double x) {
+        this.boundX = x;
+    }
+
+    public void setBoundZ(double z) {
+        this.boundZ = z;
+    }
+
+    public void setBoundY(double y) {
+        this.boundY = y;
+    }
+
+    public double getBoundX() {
+        return this.boundX;
+    }
+
+    public double getBoundZ() {
+        return this.boundZ;
+    }
+
+    public double getBoundY() {
+        return this.boundY;
+    }
+
+    public boolean getBound() {
+        return this.isBound;
+    }
+
+    //true is bound, false is not bound
+    public void setBound(boolean bound) {
+        this.isBound = bound;
     }
 
 }

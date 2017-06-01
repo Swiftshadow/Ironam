@@ -28,6 +28,7 @@ public class ModItems {
     public static ItemBase itemPlayerDetector;
     public static ItemBase spiritAntiGrav;
     public static ItemBase spiritLightningStick;
+    public static ItemBase itemRedstoneStick;
 
     public static ItemModSword swordSpiritDiamond;
     public static ItemModPickaxe pickSpiritDiamond;
@@ -69,6 +70,7 @@ public class ModItems {
         itemPlayerDetector = register(new ItemBase("itemPlayerDetector").setCreativeTab(CreativeTabs.TOOLS));
         spiritAntiGrav = register(new ItemBase("spiritAntiGrav").setCreativeTab(CreativeTabs.TOOLS));
         spiritLightningStick = register(new ItemBase("spiritLightningStick").setCreativeTab(CreativeTabs.COMBAT));
+        itemRedstoneStick = register(new ItemBase("itemRedstoneStick").setCreativeTab(CreativeTabs.TOOLS));
         GameRegistry.register(new ModArmor("ectoHelmet", EctoArmor, "ectoHelmet", EntityEquipmentSlot.HEAD));
         GameRegistry.register(new ModArmor("ectoChest", EctoArmor, "ectoChest", EntityEquipmentSlot.CHEST));
         GameRegistry.register(new ModArmor("ectoLegs", EctoArmor, "ectoLegs", EntityEquipmentSlot.LEGS));

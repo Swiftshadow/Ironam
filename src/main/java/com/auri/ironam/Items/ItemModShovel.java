@@ -19,6 +19,5 @@ public class ItemModShovel extends ItemSpade {
     public void registerItemModel()
     {
         ironam.proxy.registerItemRenderer(this, 0, name);
-        System.out.println("One shovel loaded named " + name);
     }
 }

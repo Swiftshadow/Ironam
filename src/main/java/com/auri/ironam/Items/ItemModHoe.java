@@ -19,6 +19,5 @@ public class ItemModHoe extends ItemHoe {
     public void registerItemModel()
     {
         ironam.proxy.registerItemRenderer(this, 0, name);
-        System.out.println("One hoe loaded named " + name);
     }
 }

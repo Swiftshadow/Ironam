@@ -19,6 +19,5 @@ public class ItemModAxe extends ItemAxe {
     public void registerItemModel()
     {
         ironam.proxy.registerItemRenderer(this, 0, name);
-        System.out.println("One axe loaded named " + name);
     }
 }

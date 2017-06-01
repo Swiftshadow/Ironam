@@ -22,4 +22,20 @@ public interface ISpirit {
 
     boolean getCleared();
 
+    double getBoundX();
+
+    double getBoundZ();
+
+    double getBoundY();
+
+    void setBoundX(double x);
+
+    void setBoundZ(double z);
+
+    void setBoundY(double y);
+
+    boolean getBound();
+
+    void setBound(boolean bound);
+
 }
