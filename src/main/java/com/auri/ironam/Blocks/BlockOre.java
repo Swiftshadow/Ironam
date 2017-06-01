@@ -1,4 +1,4 @@
-package com.auri.ironam.BlockBase;
+package com.auri.ironam.Blocks;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;

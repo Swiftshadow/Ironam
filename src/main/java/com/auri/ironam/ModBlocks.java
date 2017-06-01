@@ -1,6 +1,6 @@
 package com.auri.ironam;
 
-import com.auri.ironam.BlockBase.BlockBase;
+import com.auri.ironam.Blocks.BlockBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;

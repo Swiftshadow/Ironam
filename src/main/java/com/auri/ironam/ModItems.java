@@ -3,16 +3,15 @@ package com.auri.ironam;
 /**
  * Created by 1800855 on 10/17/16.
  */
-import com.auri.ironam.ItemBase.*;
+import com.auri.ironam.Items.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModItems {
 
@@ -26,6 +25,10 @@ public class ModItems {
     public static ItemBase materialSpiritGold;
     public static ItemBase weaponGravitySword;
     public static ItemBase itemGlowTorch;
+    public static ItemBase itemPlayerDetector;
+    public static ItemBase spiritAntiGrav;
+    public static ItemBase spiritLightningStick;
+    public static ItemBase itemRedstoneStick;
 
     public static ItemModSword swordSpiritDiamond;
     public static ItemModPickaxe pickSpiritDiamond;
@@ -64,6 +67,10 @@ public class ModItems {
         materialSpiritGold = register(new ItemBase("materialSpiritGold").setCreativeTab(CreativeTabs.MATERIALS));
         weaponGravitySword = register(new ItemBase("weaponGravitySword").setCreativeTab(CreativeTabs.COMBAT));
         itemGlowTorch = register(new ItemBase("itemGlowTorch").setCreativeTab(CreativeTabs.TOOLS));
+        itemPlayerDetector = register(new ItemBase("itemPlayerDetector").setCreativeTab(CreativeTabs.TOOLS));
+        spiritAntiGrav = register(new ItemBase("spiritAntiGrav").setCreativeTab(CreativeTabs.TOOLS));
+        spiritLightningStick = register(new ItemBase("spiritLightningStick").setCreativeTab(CreativeTabs.COMBAT));
+        itemRedstoneStick = register(new ItemBase("itemRedstoneStick").setCreativeTab(CreativeTabs.TOOLS));
         GameRegistry.register(new ModArmor("ectoHelmet", EctoArmor, "ectoHelmet", EntityEquipmentSlot.HEAD));
         GameRegistry.register(new ModArmor("ectoChest", EctoArmor, "ectoChest", EntityEquipmentSlot.CHEST));
         GameRegistry.register(new ModArmor("ectoLegs", EctoArmor, "ectoLegs", EntityEquipmentSlot.LEGS));
@@ -98,6 +105,31 @@ public class ModItems {
     {
         ModItems.weaponGravitySword.registerItemModel();
         ModItems.swordSpiritDiamond.registerItemModel();
+        ModItems.swordSpiritGold.registerItemModel();
+        ModItems.swordSpiritGold.registerItemModel();
+        ModItems.pickSpiritDiamond.registerItemModel();
+        ModItems.pickSpiritGold.registerItemModel();
+        ModItems.pickSpiritIron.registerItemModel();
+        ModItems.axeSpiritDiamond.registerItemModel();
+        ModItems.axeSpiritGold.registerItemModel();
+        ModItems.axeSpiritIron.registerItemModel();
+        ModItems.hoeSpiritDiamond.registerItemModel();
+        ModItems.hoeSpiritGold.registerItemModel();
+        ModItems.hoeSpiritIron.registerItemModel();
+        ModItems.shovelSpiritDiamond.registerItemModel();
+        ModItems.shovelSpiritGold.registerItemModel();
+        ModItems.shovelSpiritIron.registerItemModel();
+        ModItems.materialEctoplasm.registerItemModel();
+        ModItems.materialEctoball.registerItemModel();
+        ModItems.itemBinder.registerItemModel();
+        ModItems.materialPureEctoplasm.registerItemModel();
+        ModItems.materialSpiritDiamond.registerItemModel();
+        ModItems.materialSpiritIron.registerItemModel();
+        ModItems.materialSpiritGold.registerItemModel();
+        ModItems.itemGlowTorch.registerItemModel();
+        ModItems.itemPlayerDetector.registerItemModel();
+        ModItems.spiritAntiGrav.registerItemModel();
+        ModItems.spiritLightningStick.registerItemModel();
     }
 
     private static <T extends Item> T register(T item)

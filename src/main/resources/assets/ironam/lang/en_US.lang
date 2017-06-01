@@ -1,35 +1,38 @@
-item.materialEctoball.name=Ectoplasmic Shard
-item.materialEctoplasm.name=Ectoplasm
-item.materialPureEctoplasm.name=Pure Ectoplasm
+item.materialEctoball.name=Effegi Rara
+item.materialEctoplasm.name=Effegi
+item.materialPureEctoplasm.name=Effegi Mera
 item.materialSpiritGold.name=Aurem
 item.materialSpiritIron.name=Ferro
 item.materialSpiritDiamond.name=Adamantia
-item.itemBinder.name=Spiritual Binder
-item.itemGlowTorch.name=Glowing Torch
+item.itemBinder.name=Anima Destino
+item.itemGlowTorch.name=Candet
+item.itemPlayerDetector.name=Viri Subolet
+item.spiritAntiGrav.name=Volatus
+item.spiritLightningStick.name=Adtonia
 
-item.weaponGravitySword.name=Gravity Sword
+item.weaponGravitySword.name=Asseveratio
 
-item.ectoHelmet.name=Ectoplasmic Helmet
-item.ectoChest.name=Ectoplasmic Chestplate
-item.ectoLegs.name=Ectoplasmic Leggings
-item.ectoBoots.name=Ectoplasmic Boots
+item.ectoHelmet.name=Effegi Cassis
+item.ectoChest.name=Effegi Lamina
+item.ectoLegs.name=Effegi Genual
+item.ectoBoots.name=Effegi Plani
 
-item.pickSpiritIron.name=Ferro Pickaxe
-item.axeSpiritIron.name=Ferro Axe
-item.swordSpiritIron.name=Ferro Sword
-item.hoeSpiritIron.name=Ferro Hoe
-item.shovelSpiritIron.name=Ferro Shovel
+item.pickSpiritIron.name=Ferro Vasi
+item.axeSpiritIron.name=Ferro Bisca
+item.swordSpiritIron.name=Ferro Gladia
+item.hoeSpiritIron.name=Ferro Sarri
+item.shovelSpiritIron.name=Ferro Palae
 
-item.pickSpiritGold.name=Aurem Pickaxe
-item.axeSpiritGold.name=Aurem Axe
-item.swordSpiritGold.name=Aurem Sword
-item.hoeSpiritGold.name=Aurem Hoe
-item.shovelSpiritGold.name=Aurem Shovel
+item.pickSpiritGold.name=Aurem Vasi
+item.axeSpiritGold.name=Aurem Bisca
+item.swordSpiritGold.name=Aurem Gladia
+item.hoeSpiritGold.name=Aurem Sarri
+item.shovelSpiritGold.name=Aurem Palae
 
-item.pickSpiritDiamond.name=Adamantia Pickaxe
-item.axeSpiritDiamond.name=Adamantia Axe
-item.swordSpiritDiamond.name=Adamantia Sword
-item.hoeSpiritDiamond.name=Adamantia Hoe
-item.shovelSpiritDiamond.name=Adamantia Shovel
+item.pickSpiritDiamond.name=Adamantia Vasi
+item.axeSpiritDiamond.name=Adamantia Bisca
+item.swordSpiritDiamond.name=Adamantia Gladia
+item.hoeSpiritDiamond.name=Adamantia Sarri
+item.shovelSpiritDiamond.name=Adamantia Palae
 
-tile.blockEcto.name=Ectoplasmic Block
+tile.blockEcto.name=Effegi Block

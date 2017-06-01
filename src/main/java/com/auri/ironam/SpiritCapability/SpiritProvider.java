@@ -1,6 +1,7 @@
 package com.auri.ironam.SpiritCapability;
 
 import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -16,6 +17,7 @@ public class SpiritProvider implements ICapabilitySerializable<NBTBase> {
     public static Capability<ISpirit> SPIRIT_CAPABILITY = null;
 
     private ISpirit instance = SPIRIT_CAPABILITY.getDefaultInstance();
+    private Spirit spirit = new Spirit();
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing side) {
@@ -33,12 +35,14 @@ public class SpiritProvider implements ICapabilitySerializable<NBTBase> {
 
     @Override
     public NBTBase serializeNBT() {
+        //return this.spirit.serializeNBT();
             return SPIRIT_CAPABILITY.getStorage().writeNBT(SPIRIT_CAPABILITY, this.instance, null);
     }
 
     @Override
     public void deserializeNBT(NBTBase nbt) {
-        SPIRIT_CAPABILITY.getStorage().readNBT(SPIRIT_CAPABILITY, this.instance, null, nbt);
+        //this.spirit.deserializeNBT(nbt);
+        //SPIRIT_CAPABILITY.getStorage().readNBT(SPIRIT_CAPABILITY, this.instance, null, nbt);
     }
 
 }

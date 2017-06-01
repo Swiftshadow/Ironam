@@ -17,10 +17,17 @@ public class ModArmor extends ItemArmor {
         this.textureName = textureName;
         this.setUnlocalizedName(unlocalName);
         this.setRegistryName(ironam.MODID + ":" + unlocalName);
+        registerItemModel();
     }
 
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
     {
         return ironam.MODID + ":textures/armor/" + this.textureName + "_" + (this.armorType == EntityEquipmentSlot.LEGS ? "2" : "1") + ".png";
+    }
+
+    public void registerItemModel()
+    {
+        ironam.proxy.registerItemRenderer(this, 0, textureName);
+        System.out.println("One sword loaded named " + textureName);
     }
 }

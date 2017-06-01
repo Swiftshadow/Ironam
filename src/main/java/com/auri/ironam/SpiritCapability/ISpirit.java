@@ -13,4 +13,29 @@ public interface ISpirit {
 
     void subSpiritPoints(float points);
 
+    void setHittable(boolean hittable);
+
+    //True is not hittable, false is hittable
+    boolean getHittable();
+
+    void setCleared(boolean cleared);
+
+    boolean getCleared();
+
+    double getBoundX();
+
+    double getBoundZ();
+
+    double getBoundY();
+
+    void setBoundX(double x);
+
+    void setBoundZ(double z);
+
+    void setBoundY(double y);
+
+    boolean getBound();
+
+    void setBound(boolean bound);
+
 }
